@@ -21,59 +21,79 @@ mbPortEntry = Entry(root, width=10, bg="white", fg="black")
 mbPortEntry.grid(row=2, column=1)
 
 # read holding register label
-mbHoldRegistorStartAddressLabel = Label(root, text="Hold Registor Start Address")
-mbHoldRegistorStartAddressLabel.grid(row=3, column=0)
-# read holding register label
-mbHoldRegistorStartAddressEntry = Entry(root, width=10)
-mbHoldRegistorStartAddressEntry.grid(row=3, column=1)
+mbHoldRegisterStartAddressLabel = Label(root, text="Hold Register Start Address")
+mbHoldRegisterStartAddressLabel.grid(row=3, column=0)
+# read holding register entry
+mbHoldRegisterStartAddressEntry = Entry(root, width=10)
+mbHoldRegisterStartAddressEntry.grid(row=3, column=1)
 
-# read holding register label
-mbHoldRegistorNumLabel = Label(root, text="Hold Registor Number")
-mbHoldRegistorNumLabel.grid(row=4, column=0)
-# read holding register label
-mbHoldRegistorNumEntry = Entry(root, width=10)
-mbHoldRegistorNumEntry.grid(row=4, column=1)
+# read holding register number label
+mbHoldRegisterNumLabel = Label(root, text="Hold Register Number")
+mbHoldRegisterNumLabel.grid(row=4, column=0)
+# read holding register number entry
+mbHoldRegisterNumEntry = Entry(root, width=10)
+mbHoldRegisterNumEntry.grid(row=4, column=1)
 
-# start button
-# mbStartButton = Button(root, text="Modbus Start", bg="gray", padx=6, pady=6).grid(row=0, column=0)
-mbStartButton = Button(root, text="Start", bg="gray", padx=6, pady=6)
-mbStartButton.grid(row=1, column=2)
+# write holding register address label
+mbHoldRegisterWriteAddressLabel = Label(root, text="Write Hold Register Address")
+mbHoldRegisterWriteAddressLabel.grid(row=5, column=0)
+# write holding register address entry
+mbHoldRegisterWriteAddressEntry = Entry(root, width=10)
+mbHoldRegisterWriteAddressEntry.grid(row=5, column=1)
+
+# write holding register data label
+mbHoldRegisterWriteDataLabel = Label(root, text="Write Hold Register data")
+mbHoldRegisterWriteDataLabel.grid(row=6, column=0)
+# write holding register address entry
+mbHoldRegisterWriteDataEntry = Entry(root, width=10)
+mbHoldRegisterWriteDataEntry.grid(row=6, column=1)
+
+# empty tuple
+list_hold_reg = []
+
+def ModbusStart():
+    # start button
+    # mbStartButton = Button(root, text="Modbus Start", bg="gray", padx=6, pady=6).grid(row=6, column=0)
+    def ModbusFun():
+        mb_server = mb.ModbusServer(mbAddressEntry.get(), int(mbPortEntry.get()), 100, 1)
+        global list_hold_reg
+        list_hold_reg = list(mb_server.poll())
+        # while 1:
+        #     # global list_hold_reg
+        #     # list_hold_reg = list(mb_server.poll())
+        #     time.sleep(1)
+
+    mbStartButton = Button(root, text="Start", bg="gray", command=ModbusFun, padx=6, pady=6)
+    mbStartButton.grid(row=1, column=2)
+
+
+# create start button thread
+mbStartThread = threading.Thread(target=ModbusStart, args=[])
+mbStartThread.setDaemon(True)
+mbStartThread.start()
+
 # pause button
 mbPauseButton = Button(root, text="Pause", bg="gray", padx=6, pady=6)
 mbPauseButton.grid(row=2, column=2)
 # ModbusSlaveAddressLabel.grid(row=0, column=0)
 
-import random
 
-hold_reg = (1, 3, 4, 7, 2, 8, 3, 8, 0, 2, 56, 767, 235, 45, 67, 12, 1, 2, 3, 4,77, 5, 7, 1,12,34,56,6768,12324,55676,3435435,1244)
-
-
-# create new thread
-# while 1:
-#     a = a + 1
-#     b = b + 1
-#     time.sleep(1)
-
-
-def Show():
-    print(mbAddressEntry.get())
 
 
 def ShowTable():
     # create new window
-    tb.Table(int(mbHoldRegistorStartAddressEntry.get()), int(mbHoldRegistorNumEntry.get()), hold_reg)
+    tb.Table(int(mbHoldRegisterStartAddressEntry.get()), int(mbHoldRegisterNumEntry.get()), tuple(list_hold_reg))
 
 
-def ReadHoldRegistor():
-    print(mbAddressEntry.get())
-
-
-# show button
-mbShowButton = Button(root, text="Show Registors", bg="gray", command=ShowTable, padx=6, pady=6)
+# read holding registers button
+mbShowButton = Button(root, text="Read Registers", bg="gray", command=ShowTable, padx=6, pady=6)
 mbShowButton.grid(row=3, column=2)
-#
-#
-# myButton = Button(root, text="show the input", command=clickbutton, fg="black", bg="gray")
-# myButton.pack()
+
+# write hold register button
+mbWriteHoldButton = Button(root, text="Write Hold Register", bg="gray", command=ShowTable, padx=6, pady=6)
+mbWriteHoldButton.grid(row=5, column=2)
+
+# main function
+# if __name__ == "__main__":
 
 root.mainloop()

@@ -20,3 +20,6 @@ class ModbusServer:
             # read hold registers 0-(length-1)
             return self.master.execute(1, cst.READ_HOLDING_REGISTERS, 0, self.length)
             # return ? where to store the data
+
+    def single_wirte(self, reg_address, value):
+        return self.master.execute(1, cst.WRITE_SINGLE_REGISTER, reg_address, output_value=value)

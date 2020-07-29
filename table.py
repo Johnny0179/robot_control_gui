@@ -3,30 +3,31 @@ import tkinter.ttk as ttk
 import threading
 
 
-class Table:
-    def __init__(self, start_address, reg_num, reg):
-        self.table = Toplevel()
-        self.table.title("Holding Registers")
-        self.table.geometry("600x1400")
-        self.tree = ttk.Treeview(self.table, height=50)  # #创建表格对象,default 50 rows
+def DrawTable(start_address, reg_num, reg):
+    table = Toplevel()
+    table.title("Holding Registers")
+    table.geometry("600x1400")
 
-        # style
-        self.s = ttk.Style(self.table)
-        self.s.configure('Treeview', rowheight=40)
+    tree = ttk.Treeview(table, height=50)  # #创建表格对象,default 50 rows
 
-        self.tree["columns"] = ('#1')  # #定义列
-        self.tree.column('#0', width=30, minwidth=150)
-        self.tree.column('#1', width=30, minwidth=150)
-        # self.tree.column("姓名", width=100)  # #设置列
+    # style
+    s = ttk.Style(table)
+    s.configure('Treeview', rowheight=40)
 
-        # Define Column Headings
-        self.tree.heading('#0', text="Reg Address", anchor=W)
-        self.tree.heading('#1', text="Reg Value", anchor=W)
+    tree["columns"] = ('#1')  # #定义列
+    tree.column('#0', width=30, minwidth=150)
+    tree.column('#1', width=30, minwidth=150)
+     # tree.column("姓名", width=100)  # #设置列
 
-        # insert rows
-        for i in range(start_address, start_address + reg_num):
-            self.tree.insert("", i, text=i, values=reg[i])
+     # Define Column Headings
+    tree.heading('#0', text="Reg Address", anchor=W)
+    tree.heading('#1', text="Reg Value", anchor=W)
 
-        self.tree.pack(side=TOP, fill=X)
+    # insert rows
+    for i in range(start_address, start_address + reg_num):
+        tree.insert("", i, text=i, values=reg[i])
+
+    tree.pack(side=TOP, fill=X)
+    table.after(1000, DrawTable)
 
     # def self.TablePoll():

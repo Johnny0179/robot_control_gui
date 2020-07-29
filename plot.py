@@ -8,5 +8,6 @@ class Plot:
 
 
 a = np.random.normal(200000, 25000, 5000)
+# plt.hist(a, 50)
 plt.hist(a, 50)
 plt.show()

@@ -8,7 +8,7 @@ import table
 '''global varaibles'''
 # empty tuple
 list_hold_reg = []
-disconnect_flag = False
+stop_flag = False
 
 root = Tk()
 root.title('Robot Control GUI')
@@ -45,7 +45,6 @@ mbHoldRegisterNumLabel.grid(row=4, column=0, sticky='nw')
 mbHoldRegisterNumEntry = Entry(root, width=10)
 mbHoldRegisterNumEntry.grid(row=4, column=1)
 
-
 def ModbusConnect():
     # start button
     global mb_server
@@ -56,8 +55,7 @@ def ModbusConnect():
 
 def ModbusFun():
     global list_hold_reg
-    global disconnect_flag
-    while not disconnect_flag:
+    while 1:
         list_hold_reg = list(mb_server.poll())
         time.sleep(0.01)
 
@@ -77,14 +75,14 @@ mbStartButton = Button(root, text="Start Poll", bg="gray",
 mbStartButton.grid(row=1, column=3, sticky='nw')
 
 
-def ModbusDisconnect():
-    global disconnect_flag
-    disconnect_flag = True
+def ModbusStopPoll():
+    global stop_flag
+    stop_flag = True
 
 
 # Disconnect button
-mbDisconnectButton = Button(root, text="Disconnect", bg="gray",command=ModbusDisconnect, padx=6, pady=6)
-mbDisconnectButton.grid(row=1, column=4, sticky='nw')
+mbStopPollButton = Button(root, text="Stop Poll", bg="gray",command=ModbusStopPoll, padx=6, pady=6)
+mbStopPollButton.grid(row=1, column=4, sticky='nw')
 
 # ModbusSlaveAddressLabel.grid(row=0, column=0)
 

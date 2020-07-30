@@ -20,14 +20,14 @@ root.geometry("1200x600")
 mbAddressLabel = Label(root, text="Modbus slave address").grid(
     row=1, column=0, sticky='nw')
 mbAddressEntry = Entry(root, width=10, bg="white", fg="purple")
-mbAddressEntry.insert(END,'10.60.2.100')
+mbAddressEntry.insert(END, '10.60.2.100')
 mbAddressEntry.grid(row=1, column=1)
 
 # Port label
 mbPortLabel = Label(root, text="Modbus slave port").grid(
     row=2, column=0, sticky='nw')
 mbPortEntry = Entry(root, width=10, bg="white", fg="purple")
-mbPortEntry.insert(END,'1502')
+mbPortEntry.insert(END, '1502')
 mbPortEntry.grid(row=2, column=1)
 
 # read holding register label
@@ -45,6 +45,7 @@ mbHoldRegisterNumLabel.grid(row=4, column=0, sticky='nw')
 mbHoldRegisterNumEntry = Entry(root, width=10)
 mbHoldRegisterNumEntry.grid(row=4, column=1)
 
+
 def ModbusConnect():
     # start button
     global mb_server
@@ -55,7 +56,9 @@ def ModbusConnect():
 
 def ModbusFun():
     global list_hold_reg
-    while 1:
+    global stop_flag
+    stop_flag=False
+    while not stop_flag:
         list_hold_reg = list(mb_server.poll())
         time.sleep(0.01)
 
@@ -81,13 +84,8 @@ def ModbusStopPoll():
 
 
 # Disconnect button
-mbStopPollButton = Button(root, text="Stop Poll", bg="gray",command=ModbusStopPoll, padx=6, pady=6)
+mbStopPollButton = Button(root, text="Stop Poll", bg="gray", command=ModbusStopPoll, padx=6, pady=6)
 mbStopPollButton.grid(row=1, column=4, sticky='nw')
-
-# ModbusSlaveAddressLabel.grid(row=0, column=0)
-
-# draw table
-
 
 # read holding registers button
 mbShowButton = Button(root, text="Read Registers",
@@ -95,13 +93,27 @@ mbShowButton = Button(root, text="Read Registers",
         mbHoldRegisterNumEntry.get()), list_hold_reg), padx=6, pady=6)
 mbShowButton.grid(row=3, column=2, sticky='nw')
 
+# read 4 bytes
+mbRead4BytesLabel = Label(root, text="Read 4 bytes start address")
+mbRead4BytesLabel.grid(row=7, column=0, sticky='nw')
+# read holding register number entry
+mbRead4BytesEntry = Entry(root, width=10)
+mbRead4BytesEntry.grid(row=7, column=1)
+
+# read 4 bytes button
+mbRead4BytesButton = Button(root, text="Read 4 Bytes",
+                            bg="gray",
+                            command=lambda: table.ShowSingleTable(int(mbRead4BytesEntry.get()), list_hold_reg), padx=6,
+                            pady=6)
+mbRead4BytesButton.grid(row=7, column=2, sticky='nw')
+
 # plot figure function
 
 
 # plot figure button
 mbPlotButton = Button(root, text="Plot Figure",
                       bg="gray", command=table.ShowTable, padx=6, pady=6)
-mbPlotButton.grid(row=3, column=3, sticky='nw')
+mbPlotButton.grid(row=7, column=3, sticky='nw')
 
 # write holding register address label
 mbHoldRegisterWriteAddressLabel = Label(
